@@ -25,10 +25,10 @@ public class MessageProcessor {
       String line = message;
       String pattern = "^(([a-zA-Z0-9_']+) at (\\d+\\.\\d\\d?)p)$|(^(\\d+) sales of ([a-zA-Z0-9_']+) at (\\d+\\.\\d\\d?)p) each$|^((Add|Subtract|Multiply) (\\d+\\.\\d\\d?)p ([a-zA-Z0-9_']+))$";
 
-      // Create a Pattern object
+      
       Pattern r = Pattern.compile(pattern);
 
-      // Now create matcher object.
+
       Matcher matcher = r.matcher(line);
       if (matcher.find()) {
         if(matcher.group(1) != null){
