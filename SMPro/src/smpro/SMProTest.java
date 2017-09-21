@@ -5,12 +5,14 @@
  */
 package smpro;
 
+import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
  *
  * @author 1412625
+ * this class contains the main method of the application
  */
 public class SMProTest {
 
@@ -22,14 +24,20 @@ public class SMProTest {
         for(char c = 'A'; c <'K'; c++){
             Terminal terminal = new Terminal(""+c, smp);
             Thread t = new Thread(terminal);
-            t.start();
-            
-            
-            
+            t.start();   
+           //terminal.run();
         }
     }
   
 }
+/**the terminal class act as terminal(external company) that sends messages to the application 
+ * the message sent are generated from Transaction Message class
+ * the terminal thread runs in a while loop until a condition is met 
+ * it prints out "we are pausing"
+ * 
+ * *
+ * @author 1412625
+ */
 class Terminal implements Runnable{
  private final String name;
  private  boolean flagger = false;
@@ -39,21 +47,19 @@ class Terminal implements Runnable{
         this.smp = smp;
     }
 
-    public SMPro getSmp() {
-        return smp;
-    }
-
-    public void setSmp(SMPro smp) {
-        this.smp = smp;
-    }
     
     @Override
     public void run() {
         do{
             try {
-                Thread.sleep(1000);
+                Random r = new Random();
+                Thread.sleep(r.nextInt(5000));
                 if(smp.isFlag()){
-                    smp.setMessage(TransactionMessages.createTransactionMessage());
+                    //RegExer.main(TransactionMessages.createTransactionMessage());
+                    String sr = TransactionMessages.createTransactionMessage();
+                    System.out.println(name+": sending ... "+sr);
+                    smp.setMessage(sr);
+                    
                 }else{
                     flagger = true;
                     System.out.println(name+": we are pausing...");
@@ -62,12 +68,9 @@ class Terminal implements Runnable{
             }
         
         }while(!flagger);
-            
-        
     }
  @Override
     public String toString(){
     return name;
     }
-
 }

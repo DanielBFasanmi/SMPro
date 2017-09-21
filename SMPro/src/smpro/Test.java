@@ -9,11 +9,9 @@ package smpro;
  *
  * @author 1412625
  */
-public enum Operation {
-    // the enum class holds the possible adjustment operation that could be applied to all stored product of a particular type 
-
-    /**
-     *
-     */
-    Add, Subtract, Multiply, Insert
+public class Test {
+    public static void main(String[] args) {
+        
+        System.out.println("Value of enum : "+Operation.valueOf("Add"));
+    }
 }

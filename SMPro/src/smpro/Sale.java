@@ -8,12 +8,17 @@ package smpro;
 /**
  *
  * @author 1412625
+ * the sales class object hold the information of all the sales made on a particular type of product
  */
 public class Sale {
-    private String productName;
+    private String productName; 
     private double total;
     private int quantity;   
-
+    public Sale(){
+    productName = "";
+    total = 0.0;
+    quantity = 0;
+    }
     public String getProductName() {
         return productName;
     }
@@ -25,31 +30,51 @@ public class Sale {
     public double getTotal() {
         return total;
     }
-
-    public void setTotal(double price, Operation operation) {
+/**
+ * the setTotal method is a synchronized that locks on a 
+ * thread and keeps other thread from invoking it
+ * it is responsible for the processing of every possible transactional operation (add, subtract, multiply and insert) 
+ * that can be performed.
+ * 
+ */
+    public synchronized void setTotal(double price, Operation operation, int qty) {
         double x = 0;
         switch (operation) {
-            case ADD:
-                x += price * quantity;
+            case Add:
+            // this method takes care of Addition 
+                x = price * quantity;
                 if(x >0){
                     total +=x;
                 }
                 break;
                     
-            case SUBTRACT:
+            case Subtract:
+                // this method takes care of subtraction
                  x = price * quantity;
                 if(x >0 && (total > x)){
                     total -=x;
+                }else{
+                    total = 0.0;
                 }
+             
                 break;
                          
-            case MULTIPLY:
-               x = total / quantity;
-               total = x * price * quantity;            
+            case Multiply:  
+                // this method takes care of multiplication 
+                if(quantity > 0){
+               x = total / quantity; // to determine the initial price that was used (say we wanna double the price of a product, get the initial price, multiply it by the new price)
+               total += x * price * quantity;    
+         
+                }
                 break;
                         
-            default:
-
+            default:   
+                // this methoid takes care of new sales.
+                x += price * qty;
+                if(x >0){
+                    total +=x;
+                }
+                setQuantity(qty);
                 break;
         }
     }
@@ -57,10 +82,7 @@ public class Sale {
     public int getQuantity() {
         return quantity;
     }
-
     public void setQuantity(int quantity) {
-        this.quantity = quantity;
+        this.quantity += quantity;
     }
-    
-    
 }
